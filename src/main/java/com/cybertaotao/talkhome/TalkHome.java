@@ -1,8 +1,12 @@
 package com.cybertaotao.talkhome;
 
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,13 +14,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.cybertaotao.repository.ipParser.SplitAddress;
+import com.cybertaotao.talkhome.filter.Filter;
+import com.cybertaotao.talkhome.filter.HtmlFilter;
+import com.cybertaotao.talkhome.filter.LengthFilter;
 import com.cybertaotao.talkhome.messageContainer.FileMessageContainer;
 import com.cybertaotao.talkhome.messageContainer.MessageContainer;
 
 /**
- * Servlet implementation class Talkhome
+ * Servlet implementation class TalkHome
  */
-@WebServlet("/Talkhome")
+@WebServlet("/TalkHome")
 public class TalkHome extends HttpServlet {
 
 	/**
@@ -24,9 +32,10 @@ public class TalkHome extends HttpServlet {
 	 */
 	private static final long serialVersionUID = 1407173452980744886L;
 	private MessageContainer mc;
-	private String title = "滔滔";
-	private String welcome = "You are now in 滔滔";
-	private String allMess = "Message";
+	private String title = "TaoTao -- a website to talk some secret things";
+	private String welcome = "You are now in TaoTao";
+	private String allMess = "All Message";
+	private Filter<String> filter;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -34,6 +43,7 @@ public class TalkHome extends HttpServlet {
 	public TalkHome() {
 		super();
 		this.mc = new FileMessageContainer("messages.txt");
+		setPostTestFilter();
 		// TODO Auto-generated constructor stub
 	}
 
@@ -45,29 +55,38 @@ public class TalkHome extends HttpServlet {
 			throws ServletException, IOException {
 		response.setCharacterEncoding("UTF-8");
 		response.setHeader("content-type", "text/html;charset=UTF-8");
-		String ip = getRequestIP(request);
-		PrintWriter out = response.getWriter();
+		// printWriter
+		// PrintWriter out = response.getWriter();
+		PrintWriter out = new PrintWriter(new OutputStreamWriter(response.getOutputStream(), StandardCharsets.UTF_8));
+		// printJsp
 		JSP jsp = printJSP();
 		ArrayList<String> head = jsp.head;
 		ArrayList<String> end = jsp.end;
-
 		printArraylist(head, out);
-
-		printArraylist(mc.getAllMessage(), out, ip);
-
+		printContext(request, response, out);// print all of the context in this method
 		printArraylist(end, out);
 
 		out.close();
+	}
+
+	private void printContext(HttpServletRequest request, HttpServletResponse response, PrintWriter out) {
+		// TODO Auto-generated method stub
+		// getip
+
+		printArraylist(mc.getAllMessage(), out, "");
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-		String message = request.getParameter("postmessage").trim();
-		if (message.length() != 0) {
+		String message = this.filter.apply(request.getParameter("postmessage"));
+		String ip = getRequestIP(request);
+		String location = SplitAddress.getParserIp(ip);
+		if (message.trim().length() != 0) {
 			ArrayList<String> ms = new ArrayList<>();
-			ms.add(message);
+			ms.add("Ip " + ip + location + " :");
+			ms.addAll(dealwithBr(message));
 			// BufferedReader in = request.getReader();
 			// String line;
 			// ArrayList<String> ms= new ArrayList<>();
@@ -78,6 +97,12 @@ public class TalkHome extends HttpServlet {
 		}
 		// in.close();
 		this.doGet(request, response);
+	}
+
+	private void setPostTestFilter() {
+		// TODO Auto-generated method stub
+		this.filter = new HtmlFilter();
+		this.filter.appendFilter(new LengthFilter(5000));
 	}
 
 	class JSP {
@@ -120,7 +145,7 @@ public class TalkHome extends HttpServlet {
 	private void printArraylist(ArrayList<String> m, PrintWriter out, String name) {
 		m.forEach(x -> {
 			try {
-				out.println("<h5>" + name + ": " + x + "</h5>");
+				out.println("<div>" + name + x + "</div>");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -128,16 +153,28 @@ public class TalkHome extends HttpServlet {
 	}
 
 	private static String getRequestIP(HttpServletRequest request) {
-	    String ip = request.getHeader("x-forwarded-for");
-	    if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)){
-	        ip = request.getHeader("Proxy-Client-IP");
-	    }
-	    if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)){
-	        ip = request.getHeader("WL-Proxy-Client-IP");
-	    }
-	    if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)){
-	        ip = request.getRemoteAddr();
-	    }
-	    return ip;
+		String ip = request.getHeader("x-forwarded-for");
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getHeader("Proxy-Client-IP");
+		}
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getHeader("WL-Proxy-Client-IP");
+		}
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getRemoteAddr();
+		}
+		return ip;
 	}
+
+	private static List<String> dealwithBr(String meString) {
+		if (meString.indexOf("<br>") > 0) {
+			return Arrays.asList(meString.split("<br>"));
+		}else {
+			List<String> a= new ArrayList<>();
+			a.add(meString);
+			return a;
+		}
+		
+	}
+
 }

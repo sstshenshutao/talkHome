@@ -27,28 +27,32 @@ import java.io.File;
  *              
  */	
 public class SplitAddress {
-	public static void main(String[] args){
+	public static String getParserIp(String ipaddress){
+		String ret ="unknowedlocation";
 		try {
 			IPSeeker ipseeker = new IPSeeker(new File("qqwry.dat"));
 			IPEntity ipentity = new IPEntity();
-			String ipaddress = "130.83.161.121";
-			SplitAddress splitaddress = new SplitAddress();
-			splitaddress.SplitAddressAction(ipaddress, ipseeker, ipentity); //切分获得多级地址
-			
-			System.out.println("完整ip信息："+ipseeker.getAddress(ipaddress));
-			System.out.println("完全地址:省/市/区:"+ipseeker.getCountry(ipaddress));
-			System.out.println("nation:"+ipentity.getNation());
-			System.out.println("province:"+ipentity.getProvince());
-			System.out.println("city:"+ipentity.getCity());
-			System.out.println("region:"+ipentity.getRegion());
-			System.out.println("使用的网络(运营商ISP):"+ipseeker.getIsp(ipaddress));
+			SplitAddressAction(ipaddress, ipseeker, ipentity); //切分获得多级地址
+			StringBuffer sb =new StringBuffer();
+			sb.append("[from ");
+			sb.append(ipentity.getNation());
+			sb.append("/");
+			sb.append(ipentity.getProvince());
+			sb.append("/");
+			sb.append(ipentity.getCity());
+			sb.append("/");
+			sb.append(ipentity.getRegion());
+			sb.append("/");
+			sb.append(ipseeker.getIsp(ipaddress));
+			sb.append(" ]");
+			ret= sb.toString();
 		} catch (Exception e) {
-			e.printStackTrace();
+			ret = "[unknowedlocation]";
 		}
-		
+		return ret;
 	}
 	
-	public void SplitAddressAction(String ipaddress, IPSeeker ipseeker, IPEntity ipentity){
+	public static void SplitAddressAction(String ipaddress, IPSeeker ipseeker, IPEntity ipentity){
 		try {			
 			String alladdress = ipseeker.getCountry(ipaddress);	
 			String[] part;

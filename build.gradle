@@ -11,6 +11,7 @@
 apply plugin: 'java-library'
 apply plugin: 'war'
 
+
 // In this section you declare where to find the dependencies of your project
 repositories {
     // Use 'jcenter' for resolving your dependencies.
@@ -34,5 +35,13 @@ dependencies {
 	compileOnly group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
 
 	
+}
+
+task copyJars(type:Copy) {
+
+  from configurations.runtime
+
+  into '/Users/shenshutao/eclipse-workspace/TalkHome/build' // 目标位置
+
 }
 
