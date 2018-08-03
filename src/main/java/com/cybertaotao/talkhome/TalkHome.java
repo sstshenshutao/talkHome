@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.cybertaotao.repository.ipParser.SplitAddress;
+import com.cybertaotao.model.ipParser.SplitAddress;
 import com.cybertaotao.talkhome.filter.Filter;
 import com.cybertaotao.talkhome.filter.HtmlFilter;
 import com.cybertaotao.talkhome.filter.LengthFilter;
@@ -72,7 +72,16 @@ public class TalkHome extends HttpServlet {
 	private void printContext(HttpServletRequest request, HttpServletResponse response, PrintWriter out) {
 		// TODO Auto-generated method stub
 		// getip
-
+		String ip = getRequestIP(request);
+		String location = SplitAddress.getParserIp(ip);
+		out.print("<h2>"+"We don't record Ip and location. "
+				+ "But you need to know: it's very easy to get your IP and location, "
+				+ "if you don't use VPN! Your IP:" + ip + location );
+		out.print("try VPN right now for free this Monate!"+ "</h2>");
+		out.print("<h2>"+"我们不记录IP地址，"
+				+ "但是你需要知道：如果你不使用VPN，网站获取你的ip地址和位置信息是很容易的！"
+				 + ip + location );
+		out.print("现在试用VPN，本月不限流量完全免费！"+ "</h2>");
 		printArraylist(mc.getAllMessage(), out, "");
 	}
 
@@ -80,12 +89,11 @@ public class TalkHome extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
+		setPostTestFilter();
 		String message = this.filter.apply(request.getParameter("postmessage"));
-		String ip = getRequestIP(request);
-		String location = SplitAddress.getParserIp(ip);
+		
 		if (message.trim().length() != 0) {
 			ArrayList<String> ms = new ArrayList<>();
-			ms.add("Ip " + ip + location + " :");
 			ms.addAll(dealwithBr(message));
 			// BufferedReader in = request.getReader();
 			// String line;
@@ -127,11 +135,15 @@ public class TalkHome extends HttpServlet {
 		jsp.end.add("message<input type=\"text\" name=\"postmessage\"/><br>");
 		jsp.end.add("<input type=\"submit\"/>");
 		jsp.end.add("</form>");
+//		jsp.end.addAll(hiddenEle());
 		jsp.end.add("</body>");
 		jsp.end.add("</html>");
 		return jsp;
 	}
-
+//	private ArrayList<String> hiddenEle() {
+//		ArrayList<String> ret = new ArrayList<>();
+//		ret.add("<p hidden></p>");
+//	}
 	private void printArraylist(ArrayList<String> m, PrintWriter out) {
 		m.forEach(x -> {
 			try {

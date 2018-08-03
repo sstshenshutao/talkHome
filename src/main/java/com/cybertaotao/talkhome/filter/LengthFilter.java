@@ -17,7 +17,7 @@ public class LengthFilter extends AbstractFilter<String> implements Filter<Strin
 	public String filter(String message) {
 		// TODO Auto-generated method stub
 		if (message.length() > len) {
-			return "too long message!";
+			return "";
 		}
 		return message;
 	}

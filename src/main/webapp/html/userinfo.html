@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>用户信息</title>
+    <link href="testlogin.css" rel="stylesheet" type="text/css"/>
+<style>
+    #login {
+    width: 290px;
+    height: auto;
+    overflow: hidden;
+    border: solid 1px #CCCCCC;
+}
+#login_title {
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    background-color: #F60;
+    text-align: center;
+}
+.line {
+    width: 250px;
+    height: 30px;
+    line-height: 30px;
+    margin-left: 20px;
+    text-align: center;
+    font-family: 楷体;
+}
+.line input {
+    width: 150px;
+}
+.line a {
+    font-size: 14px;
+    color: black;
+}
+.line span {
+    color: #F00;
+}
+#log_submit {
+    display: block;
+    width: 200px;
+    height: 30px;
+    margin-left: 45px;
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+#wrong {
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    color: #F60;
+    margin-left: 45px;
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+</style>
+</head>
+
+
+<body>
+<form action="Login" method="post">
+  <div id="login">
+    <div id="login_title">用&nbsp;户&nbsp;信&nbsp;息</div>
+    <div class="line"><span id="msg"></span></div>
+    
+    <div class="line">账号:&nbsp;&nbsp;zhanghao
+    </div>
+    <div class="line">会员期限:&nbsp;&nbsp;2018.07.31
+    </div>
+    <div class="line">端口号(port):
+    </div>
+    <div class="line">40001
+    </div>
+    <div class="line">端口密码(port_password):
+    </div>
+    <div class="line">123456
+    </div>
+    <div class="line">剩余流量:
+    </div>
+    <div class="line">100m
+    </div>
+
+    <div class="line">原密码&nbsp;
+      <input type="password" placeholder="" id="username" name="originpassword"/>
+    </div>
+    <div class="line">新密码&nbsp;
+      <input type="password" placeholder="" id="username" name="newpassword"/>
+    </div>
+    <div class="line">重复新密码&nbsp;
+      <input type="password" placeholder="" id="username" name="renewpassword"/>
+    </div>
+    <input type="submit" id="log_submit" type="button" value="修改密码">
+    
+
+</div>
+
+    <div class="line"><a href="https://cybertaotao.com/bbs/">进入论坛</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://cybertaotao.com/download/">下载软件</a></div>
+<div class="line"><a href="https://cybertaotao.com/exit/">退出账号</a>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+  
+</form>
+
+<div id="wrong">海阔凭鱼跃&nbsp;&nbsp;天高任鸟飞&nbsp;&nbsp;</div>
+
+</body>
+</html>

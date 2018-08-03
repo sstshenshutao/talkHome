@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>找回密码</title>
+    <link href="testlogin.css" rel="stylesheet" type="text/css"/>
+<style>
+    #login {
+    width: 290px;
+    height: auto;
+    overflow: hidden;
+    border: solid 1px #CCCCCC;
+}
+#login_title {
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    background-color: #F60;
+    text-align: center;
+}
+.line {
+    width: 250px;
+    height: 30px;
+    line-height: 30px;
+    margin-left: 20px;
+    text-align: center;
+    font-family: 楷体;
+}
+.line input {
+    width: 150px;
+}
+.line a {
+    font-size: 14px;
+    color: black;
+}
+.line span {
+    color: #F00;
+}
+#log_submit {
+    display: block;
+    width: 200px;
+    height: 30px;
+    margin-left: 45px;
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+#wrong {
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    color: #F60;
+    margin-left: 45px;
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+</style>
+</head>
+
+
+<body>
+<form action="forgetid" method="post">
+  <div id="login">
+    <div id="login_title">忘&nbsp;记&nbsp;密&nbsp;码</div>
+    <div class="line"><span id="msg"></span></div>
+    
+    <div class="line">请输入你的账号 注册邮箱
+    </div>
+    <div class="line">账号到期时间
+    </div>
+
+    <div class="line">账号&nbsp;
+      <input type="text" placeholder="" id="username" name="account"/>
+    </div>
+    <div class="line">账号到期时间&nbsp;
+      <input type="password" placeholder="2018.07.31" id="username" name="timelimit"/>
+    </div>
+    <div class="line">注册邮箱&nbsp;
+      <input type="password" placeholder="" id="username" name="email"/>
+    </div>
+    <div>
+      <input type="hidden" id="checkcode" value="need!generate" name="checkcode"/>
+    </div>
+    <input type="submit" id="log_submit" type="button" value="找回密码">
+</div>
+
+    <div class="line"><a href="https://cybertaotao.com/bbs/">进入论坛</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://cybertaotao.com/download/">下载软件</a></div>
+
+  
+</form>
+<div id="wrong">海阔凭鱼跃&nbsp;&nbsp;天高任鸟飞&nbsp;&nbsp;</div>
+
+</body>
+</html>
